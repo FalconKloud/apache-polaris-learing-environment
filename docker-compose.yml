@@ -1,0 +1,38 @@
+services:
+  polaris:
+    image: alexmerced/polaris1126
+    container_name: polaris
+    ports:
+      - "8181:8181"
+      - "8182"
+    networks:
+      polaris-quickstart:
+    volumes:
+      - ./icebergdata:/data
+    environment:
+      - AWS_REGION=$AWS_REGION
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+    command: # override the command to specify aws keys as dropwizard config
+      - server
+      - polaris-server.yml
+    # Spark
+  spark:
+    platform: linux/x86_64
+    image: alexmerced/spark35notebook:latest
+    ports: 
+      - 8080:8080  # Master Web UI
+      - 7077:7077  # Master Port
+      - 8888:8888  # Notebook
+    volumes:
+      - ./icebergdata:/data
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+    container_name: spark
+    networks:
+      polaris-quickstart:
+
+networks:
+  polaris-quickstart:
