@@ -45,6 +45,7 @@ curl -i -X POST \
 Use this token to make a get request to create a catalog.
 
 For S3:
+_make sure aws credentials are in the envirironment for containers by putting them in `.env`_
 
 ```
 curl -i -X POST -H "Authorization: Bearer principal:root;password:620fa1d5850199bc7628155693977bc1;realm:default-realm;role:ALL" -H 'Accept: application/json' -H 'Content-Type: application/json' \
