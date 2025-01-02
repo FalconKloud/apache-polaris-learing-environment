@@ -160,3 +160,47 @@ curl -i -X POST \
 ```
 {"principal":{"name":"polarisuser","clientId":"90e1c28f2ca495fb","properties":{},"createTimestamp":1732653943717,"lastUpdateTimestamp":1732653943717,"entityVersion":1},"credentials":{"clientId":"90e1c28f2ca495fb","clientSecret":"f71c0c2321009ec63a6f6c5228370b26"}}%  
 ```
+
+## PySpark Example
+
+```py
+import pyspark
+from pyspark.sql import SparkSession
+import os
+
+## DEFINE SENSITIVE VARIABLES
+POLARIS_URI = 'http://polaris:8181/api/catalog'
+POLARIS_CATALOG_NAME = 'polariscatalog'
+POLARIS_CREDENTIALS = 'a3b1100071704a25:3920a59d4e73f8c2dc1e89d00b4ee67f'
+POLARIS_SCOPE = 'PRINCIPAL_ROLE:ALL'
+
+
+
+conf = (
+    pyspark.SparkConf()
+        .setAppName('app_name')
+  		#packages
+        .set('spark.jars.packages', 'org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.5.2,org.apache.hadoop:hadoop-aws:3.4.0')
+  		#SQL Extensions
+        .set('spark.sql.extensions', 'org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions')
+  		#Configuring Catalog
+        .set('spark.sql.catalog.polaris', 'org.apache.iceberg.spark.SparkCatalog')
+        .set('spark.sql.catalog.polaris.warehouse', POLARIS_CATALOG_NAME)
+        .set('spark.sql.catalog.polaris.header.X-Iceberg-Access-Delegation', 'true')
+        .set('spark.sql.catalog.polaris.catalog-impl', 'org.apache.iceberg.rest.RESTCatalog')
+        .set('spark.sql.catalog.polaris.uri', POLARIS_URI)
+        .set('spark.sql.catalog.polaris.credential', POLARIS_CREDENTIALS)
+        .set('spark.sql.catalog.polaris.scope', POLARIS_SCOPE)
+        .set('spark.sql.catalog.polaris.token-refresh-enabled', 'true')
+)
+
+## Start Spark Session
+spark = SparkSession.builder.config(conf=conf).getOrCreate()
+print("Spark Running")
+
+## Run a Query
+spark.sql("CREATE NAMESPACE IF NOT EXISTS polaris.db").show()
+spark.sql("CREATE TABLE polaris.db.names (name STRING) USING iceberg").show()
+spark.sql("INSERT INTO polaris.db.names VALUES ('Alex Merced'), ('Andrew Madson')").show()
+spark.sql("SELECT * FROM polaris.db.names").show()
+```
