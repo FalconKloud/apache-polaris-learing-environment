@@ -19,7 +19,7 @@ services:
     # Spark
   spark:
     platform: linux/x86_64
-    image: alexmerced/spark35notebook:latest
+    image: alexmerced/spark35nb:latest
     ports: 
       - 8080:8080  # Master Web UI
       - 7077:7077  # Master Port
