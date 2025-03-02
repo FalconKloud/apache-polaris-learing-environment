@@ -1,0 +1,73 @@
+{
+  "format-version" : 2,
+  "table-uuid" : "5a222bc0-0d7c-474a-879a-5505711cdfc0",
+  "location" : "file:///data/db/names",
+  "last-sequence-number" : 1,
+  "last-updated-ms" : 1740886527609,
+  "last-column-id" : 1,
+  "current-schema-id" : 0,
+  "schemas" : [ {
+    "type" : "struct",
+    "schema-id" : 0,
+    "fields" : [ {
+      "id" : 1,
+      "name" : "name",
+      "required" : false,
+      "type" : "string"
+    } ]
+  } ],
+  "default-spec-id" : 0,
+  "partition-specs" : [ {
+    "spec-id" : 0,
+    "fields" : [ ]
+  } ],
+  "last-partition-id" : 999,
+  "default-sort-order-id" : 0,
+  "sort-orders" : [ {
+    "order-id" : 0,
+    "fields" : [ ]
+  } ],
+  "properties" : {
+    "owner" : "root",
+    "created-at" : "2025-03-02T03:35:23.495393219Z",
+    "write.parquet.compression-codec" : "zstd"
+  },
+  "current-snapshot-id" : 8431219299824460976,
+  "refs" : {
+    "main" : {
+      "snapshot-id" : 8431219299824460976,
+      "type" : "branch"
+    }
+  },
+  "snapshots" : [ {
+    "sequence-number" : 1,
+    "snapshot-id" : 8431219299824460976,
+    "timestamp-ms" : 1740886527609,
+    "summary" : {
+      "operation" : "append",
+      "spark.app.id" : "local-1740886433320",
+      "added-data-files" : "2",
+      "added-records" : "2",
+      "added-files-size" : "907",
+      "changed-partition-count" : "1",
+      "total-records" : "2",
+      "total-files-size" : "907",
+      "total-data-files" : "2",
+      "total-delete-files" : "0",
+      "total-position-deletes" : "0",
+      "total-equality-deletes" : "0"
+    },
+    "manifest-list" : "file:/data/db/names/metadata/snap-8431219299824460976-1-38c2fc2a-7521-495e-8cff-871228ba33b3.avro",
+    "schema-id" : 0
+  } ],
+  "statistics" : [ ],
+  "partition-statistics" : [ ],
+  "snapshot-log" : [ {
+    "timestamp-ms" : 1740886527609,
+    "snapshot-id" : 8431219299824460976
+  } ],
+  "metadata-log" : [ {
+    "timestamp-ms" : 1740886523767,
+    "metadata-file" : "file:/data/db/names/metadata/00000-d4eea9da-5262-45aa-9185-2421f91cba56.metadata.json"
+  } ]
+}

@@ -42,7 +42,7 @@ curl -i -X POST \
   http://localhost:8181/api/catalog/v1/oauth/tokens \
   -d 'grant_type=client_credentials&client_id=3308616f33ef2cfe&client_secret=620fa1d5850199bc7628155693977bc1&scope=PRINCIPAL_ROLE:ALL'
 
-  curl -i -X POST \
+curl -i -X POST \
   http://localhost:8181/api/catalog/v1/oauth/tokens \
   -d 'grant_type=client_credentials&client_id=a7b6102bfb34da19&client_secret=ef49b2c1ae0f607185d9edd8bb13c1c8&scope=PRINCIPAL_ROLE:ALL'
 
@@ -72,36 +72,21 @@ curl -i -X POST -H "Authorization: Bearer principal:root;password:620fa1d5850199
 Using Local File System:
 
 ```
-curl -i -X POST -H "Authorization: Bearer principal:root;password:620fa1d5850199bc7628155693977bc1;realm:default-realm;role:ALL" -H 'Accept: application/json' -H 'Content-Type: application/json' \
-  http://localhost:8181/api/management/v1/catalogs \
-  -d '{"name": "polariscatalog", "type": "INTERNAL", "properties": {
-        "default-base-location": "file:///data"
-    },"storageConfigInfo": {
-        "storageType": "FILE",
-        "allowedLocations": [
-            "file:///data"
-        ]
-    } }'
-
 curl -i -X POST -H "Authorization: Bearer principal:root;password:ef49b2c1ae0f607185d9edd8bb13c1c8;realm:default-realm;role:ALL" -H 'Accept: application/json' -H 'Content-Type: application/json' \
-  http://localhost:8181/api/management/v1/catalogs \
-  -d '{"name": "polariscatalog", "type": "INTERNAL", "properties": {
-        "default-base-location": "file:///data"
-    },"storageConfigInfo": {
-        "storageType": "FILE",
-        "allowedLocations": [
-            "file:///data"
-        ]
-    } }'
+    http://localhost:8181/api/management/v1/catalogs \
+    -d '{"name": "polariscatalog", "type": "INTERNAL", "properties": {
+          "default-base-location": "file:///data"
+      },"storageConfigInfo": {
+          "storageType": "FILE",
+          "allowedLocations": [
+              "file:///data"
+          ]
+      } }'
 ```
 
 Confirm Catalog Was Created:
 
 ```
-curl -X GET "http://localhost:8181/api/management/v1/catalogs" \
-     -H "Authorization: Bearer principal:root;password:620fa1d5850199bc7628155693977bc1;realm:default-realm;role:ALL" \
-     -H "Accept: application/json"
-
 curl -X GET "http://localhost:8181/api/management/v1/catalogs" \
      -H "Authorization: Bearer principal:root;password:ef49b2c1ae0f607185d9edd8bb13c1c8;realm:default-realm;role:ALL" \
      -H "Accept: application/json"
@@ -114,84 +99,54 @@ Create a Principal - OR a User (principal:roo) that creates tables and stuff lik
 
 ```
 curl -X POST "http://localhost:8181/api/management/v1/principals" \
-  -H "Authorization: Bearer principal:root;password:620fa1d5850199bc7628155693977bc1;realm:default-realm;role:ALL" \
-  -H "Content-Type: application/json" \
-  -d '{"name": "polarisuser", "type": "user"}'
-
-curl -X POST "http://localhost:8181/api/management/v1/principals" \
   -H "Authorization: Bearer principal:root;password:ef49b2c1ae0f607185d9edd8bb13c1c8;realm:default-realm;role:ALL" \
   -H "Content-Type: application/json" \
-  -d '{"name": "polarisuser", "type": "user"}'
+  -d '{"name": "catalogAdmin", "type": "user"}'
 
 Response:
-  {"principal":{"name":"polarisuser","clientId":"b32f63d90f855f78","properties":{},"createTimestamp":1740823993440,"lastUpdateTimestamp":1740823993440,"entityVersion":1},"credentials":{"clientId":"b32f63d90f855f78","clientSecret":"ae10161e0b6582c5cb32c5f1d66286d6"}}
+{"principal":{"name":"catalogAdmin","clientId":"ffead738c5fe6950","properties":{},"createTimestamp":1740885986024,"lastUpdateTimestamp":1740885986024,"entityVersion":1},"credentials":{"clientId":"ffead738c5fe6950","clientSecret":"c5fe2753cb3c74a3af82c2d9fa0d1c01"}}
 ```
 
 Create a Principal Role
 
 ``` 
 curl -X POST "http://localhost:8181/api/management/v1/principal-roles" \
-  -H "Authorization: Bearer principal:root;password:620fa1d5850199bc7628155693977bc1;realm:default-realm;role:ALL" \
-  -H "Content-Type: application/json" \
-  -d '{"principalRole": {"name": "polarisuserrole"}}'
-
-curl -X POST "http://localhost:8181/api/management/v1/principal-roles" \
   -H "Authorization: Bearer principal:root;password:ae10161e0b6582c5cb32c5f1d66286d6;realm:default-realm;role:ALL" \
   -H "Content-Type: application/json" \
-  -d '{"principalRole": {"name": "polarisuserrole"}}'
+  -d '{"principalRole": {"name": "catalogAdminRole"}}'
 ```
 
 Assign Principal Role to Principal
 
 ```
-curl -X PUT "http://localhost:8181/api/management/v1/principals/polarisuser/principal-roles" \
-  -H "Authorization: Bearer principal:root;password:620fa1d5850199bc7628155693977bc1;realm:default-realm;role:ALL" \
-  -H "Content-Type: application/json" \
-  -d '{"principalRole": {"name": "polarisuserrole"}}'
-
-  curl -X PUT "http://localhost:8181/api/management/v1/principals/polarisuser/principal-roles" \
+curl -X PUT "http://localhost:8181/api/management/v1/principals/catalogAdmin/principal-roles" \
   -H "Authorization: Bearer principal:root;password:ae10161e0b6582c5cb32c5f1d66286d6;realm:default-realm;role:ALL" \
   -H "Content-Type: application/json" \
-  -d '{"principalRole": {"name": "polarisuserrole"}}'
+  -d '{"principalRole": {"name": "catalogAdminRole"}}'
 ```
 
 Create a Catalog Role
 
 ```
 curl -X POST "http://localhost:8181/api/management/v1/catalogs/polariscatalog/catalog-roles" \
-  -H "Authorization: Bearer principal:root;password:620fa1d5850199bc7628155693977bc1;realm:default-realm;role:ALL" \
-  -H "Content-Type: application/json" \
-  -d '{"catalogRole": {"name": "polariscatalogrole"}}'
-
-curl -X POST "http://localhost:8181/api/management/v1/catalogs/polariscatalog/catalog-roles" \
   -H "Authorization: Bearer principal:root;password:ae10161e0b6582c5cb32c5f1d66286d6;realm:default-realm;role:ALL" \
   -H "Content-Type: application/json" \
-  -d '{"catalogRole": {"name": "polariscatalogrole"}}'
+  -d '{"catalogRole": {"name": "catalogAdminRole"}}'
 ```
 
 Assign Catalog Role to Principal Role
 
 ```
-curl -X PUT "http://localhost:8181/api/management/v1/principal-roles/polarisuserrole/catalog-roles/polariscatalog" \
-  -H "Authorization: Bearer principal:root;password:620fa1d5850199bc7628155693977bc1;realm:default-realm;role:ALL" \
-  -H "Content-Type: application/json" \
-  -d '{"catalogRole": {"name": "polariscatalogrole"}}'
-
-curl -X PUT "http://localhost:8181/api/management/v1/principal-roles/polarisuserrole/catalog-roles/polariscatalog" \
+curl -X PUT "http://localhost:8181/api/management/v1/principal-roles/catalogAdminRole/catalog-roles/polariscatalog" \
   -H "Authorization: Bearer principal:root;password:ae10161e0b6582c5cb32c5f1d66286d6;realm:default-realm;role:ALL" \
   -H "Content-Type: application/json" \
-  -d '{"catalogRole": {"name": "polariscatalogrole"}}'
+  -d '{"catalogRole": {"name": "catalogAdminRole"}}'
 ```
 
 Grant Catalog Role Privilege
 
 ```
-curl -X PUT "http://localhost:8181/api/management/v1/catalogs/polariscatalog/catalog-roles/polariscatalogrole/grants" \
-  -H "Authorization: Bearer principal:root;password:620fa1d5850199bc7628155693977bc1;realm:default-realm;role:ALL" \
-  -H "Content-Type: application/json" \
-  -d '{"grant": {"type": "catalog", "privilege": "CATALOG_MANAGE_CONTENT"}}'
-
-curl -X PUT "http://localhost:8181/api/management/v1/catalogs/polariscatalog/catalog-roles/polariscatalogrole/grants" \
+curl -X PUT "http://localhost:8181/api/management/v1/catalogs/polariscatalog/catalog-roles/catalogAdminRole/grants" \
   -H "Authorization: Bearer principal:root;password:ae10161e0b6582c5cb32c5f1d66286d6;realm:default-realm;role:ALL" \
   -H "Content-Type: application/json" \
   -d '{"grant": {"type": "catalog", "privilege": "CATALOG_MANAGE_CONTENT"}}'
@@ -271,9 +226,3 @@ spark.sql("CREATE TABLE polaris.db.names (name STRING) USING iceberg").show()
 spark.sql("INSERT INTO polaris.db.names VALUES ('Alex Merced'), ('Andrew Madson')").show()
 spark.sql("SELECT * FROM polaris.db.names").show()
 ```
-
-=================================================================
-
-``` Troubleshooting
-
-try using a different principal catalog_admin 
